@@ -24,11 +24,11 @@ mysql -uroot -e "grant all privileges on agner.* to agner@localhost;"
 mysql -uroot -e "set global log_bin_trust_function_creators = 1;"
 echo "Integração ok"
 
-zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz | mysql --default-character-set=utf8mb4 -uagner -p"Aguinho29@3" agner
+zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz | mysql --default-character-set=utf8mb4 -uagner -p"${{secrets.ZABBIX_SECRET}}" agner
 
 mysql -uroot -e "set global log_bin_trust_function_creators = 0;"
 
-sed 's/# DBPassword=/DBPassword=Aguinho29@3/g' /etc/zabbix/zabbix_server.conf -i
+sed 's/# DBPassword=/DBPassword=${{secrets.ZABBIX_SECRET}}/g' /etc/zabbix/zabbix_server.conf -i
 sed 's/DBName=zabbix/DBName=agner/' /etc/zabbix/zabbix_server.conf -i
 sed 's/DBUser=zabbix/DBUser=agner/' /etc/zabbix/zabbix_server.conf -i
 
